@@ -67,7 +67,7 @@ Shader ResourceManager::loadShaderFromFile(const GLchar *vShaderFile, const GLch
         // Convert stream into string
         vertexCode = vShaderStream.str();
         fragmentCode = fShaderStream.str();
-        // If geometry shader path is present, also load a geometry shader
+        // If geometry shaders path is present, also load a geometry shaders
         if (gShaderFile != nullptr)
         {
             std::ifstream geometryShaderFile(gShaderFile);
@@ -79,12 +79,12 @@ Shader ResourceManager::loadShaderFromFile(const GLchar *vShaderFile, const GLch
     }
     catch (std::exception e)
     {
-        std::cout << "ERROR::SHADER: Failed to read shader files" << std::endl;
+        std::cout << "ERROR::SHADER: Failed to read shaders files" << std::endl;
     }
     const GLchar *vShaderCode = vertexCode.c_str();
     const GLchar *fShaderCode = fragmentCode.c_str();
     const GLchar *gShaderCode = geometryCode.c_str();
-    // 2. Now create shader object from source code
+    // 2. Now create shaders object from source code
     Shader shader;
     shader.Compile(vShaderCode, fShaderCode, gShaderFile != nullptr ? gShaderCode : nullptr);
     return shader;

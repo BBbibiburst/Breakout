@@ -7,6 +7,8 @@
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "resource_manager.h"
+#include "tools/SpriteRenderer.h"
 
 // 代表了游戏的当前状态
 enum GameState {
@@ -30,6 +32,8 @@ public:
     void ProcessInput(GLfloat dt);
     void Update(GLfloat dt);
     void Render();
+private:
+    SpriteRenderer  *Renderer;
 };
 
 

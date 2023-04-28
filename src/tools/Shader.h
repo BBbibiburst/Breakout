@@ -11,7 +11,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 
-// General purpsoe shader object. Compiles from file, generates
+// General purpsoe shaders object. Compiles from file, generates
 // compile/link-time error messages and hosts several utility
 // functions for easy management.
 class Shader
@@ -21,9 +21,9 @@ public:
     GLuint ID;
     // Constructor
     Shader() { }
-    // Sets the current shader as active
+    // Sets the current shaders as active
     Shader  &Use();
-    // Compiles the shader from given source code
+    // Compiles the shaders from given source code
     void    Compile(const GLchar *vertexSource, const GLchar *fragmentSource, const GLchar *geometrySource = nullptr); // Note: geometry source code is optional
     // Utility functions
     void    SetFloat    (const GLchar *name, GLfloat value, GLboolean useShader = false);
