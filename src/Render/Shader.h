@@ -6,9 +6,9 @@
 #define BREAKOUT_SHADER_H
 #include <string>
 
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "glad/glad.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 
 // General purpsoe shaders object. Compiles from file, generates

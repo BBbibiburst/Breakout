@@ -6,7 +6,7 @@
 #define BREAKOUT_TEXTURE2D_H
 
 
-#include <glad/glad.h>
+#include "glad/glad.h"
 
 // Texture2D is able to store and configure a texture in OpenGL.
 // It also hosts utility functions for easy management.

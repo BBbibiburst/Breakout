@@ -2,7 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-#include "game.h"
+#include "Game/Game.h"
 #include "resource_manager.h"
 
 
