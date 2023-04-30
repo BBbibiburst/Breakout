@@ -8,9 +8,9 @@
 #include <vector>
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-#include "../resource_manager.h"
+#include "GameResource/resource_manager.h"
 #include "../Render/SpriteRenderer.h"
-#include "GameLevel.h"
+#include "GameLevel/GameLevel.h"
 
 // 代表了游戏的当前状态
 enum GameState {
@@ -18,6 +18,15 @@ enum GameState {
     GAME_MENU,
     GAME_WIN
 };
+
+enum Direction {
+    UP,
+    RIGHT,
+    DOWN,
+    LEFT
+};
+
+typedef std::tuple<GLboolean, Direction, glm::vec2> Collision;
 
 class Game {
 public:
@@ -42,6 +51,13 @@ public:
     void Update(GLfloat dt);
 
     void Render();
+
+    void DoCollisions();
+
+    // Reset
+    void ResetLevel();
+
+    void ResetPlayer();
 };
 
 

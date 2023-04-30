@@ -5,10 +5,10 @@
 #ifndef BREAKOUT_GAMELEVEL_H
 #define BREAKOUT_GAMELEVEL_H
 
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
 #include <vector>
-#include "GameObject.h"
-#include "../resource_manager.h"
+#include "../GameObject/GameObject.h"
+#include "../GameResource/resource_manager.h"
 #include <fstream>
 #include <sstream>
 

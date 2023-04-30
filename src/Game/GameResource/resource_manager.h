@@ -9,10 +9,10 @@
 #include <map>
 #include <string>
 
-#include <glad/glad.h>
+#include "glad/glad.h"
 
-#include "Render/Texture2D.h"
-#include "Render/Shader.h"
+#include "../../Render/Texture2D.h"
+#include "../../Render/Shader.h"
 
 
 // A static singleton ResourceManager class that hosts several
