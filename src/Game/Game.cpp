@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "GameObject/BallObject.h"
 #include "GameObject/ParticleGenerator.h"
+#include "Render/PostProcessor.h"
 
 
 SpriteRenderer *Renderer;
@@ -24,6 +25,12 @@ BallObject     *Ball;
 
 // 粒子发生器
 ParticleGenerator   *Particles;
+
+// 后处理
+PostProcessor   *Effects;
+
+// 摇晃时间
+GLfloat ShakeTime = 0.0f;
 
 GLboolean CheckCollision(GameObject &one, GameObject &two);
 
@@ -56,10 +63,18 @@ void Game::Init()
     // 配置粒子着色器
     ResourceManager::GetShader("particle").Use().SetInteger("sprite", 0);
     ResourceManager::GetShader("particle").SetMatrix4("projection", projection);
+    // 加载后处理着色器
+    ResourceManager::LoadShader("../src/Game/Render/shaders/postprocessing.vsh", "../src/Game/Render/shaders/postprocessing.fsh", nullptr, "postprocessing");
+    // 配置后处理着色器
+    projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width),
+                            static_cast<GLfloat>(this->Height), 0.0f, -1.0f, 1.0f);
+    ResourceManager::GetShader("postprocessing").Use().SetInteger("scene", 0);
+    ResourceManager::GetShader("postprocessing").SetMatrix4("projection", projection);
 
     // 设置专用于渲染的控制
     Shader spriteShader = ResourceManager::GetShader("sprite");
     Renderer = new SpriteRenderer(spriteShader);
+    Effects = new PostProcessor(ResourceManager::GetShader("postprocessing"), this->Width, this->Height);
     // 加载纹理
     ResourceManager::LoadTexture("../src/Game/GameResource/textures/background.jpg", GL_FALSE, "background");
     ResourceManager::LoadTexture("../src/Game/GameResource/textures/face.png", GL_TRUE, "face");
@@ -106,6 +121,13 @@ void Game::Update(GLfloat dt)
     }
     // Update particles
     Particles->Update(dt, *Ball, 2, glm::vec2(Ball->Radius / 2));
+    // 摇晃
+    if (ShakeTime > 0.0f)
+    {
+        ShakeTime -= dt;
+        if (ShakeTime <= 0.0f)
+            Effects->Shake = false;
+    }
 }
 
 
@@ -142,6 +164,8 @@ void Game::Render()
 {
     if(this->State == GAME_ACTIVE)
     {
+        // 开启后处理效果
+        Effects->BeginRender();
         // 绘制背景
         Texture2D background = ResourceManager::GetTexture("background");
         Renderer->DrawSprite(background,
@@ -155,6 +179,9 @@ void Game::Render()
         Particles->Draw();
         // 绘制球
         Ball->Draw(*Renderer);
+        // 绘制后处理效果
+        Effects->EndRender();
+        Effects->Render(glfwGetTime());
     }
 }
 
@@ -170,6 +197,11 @@ void Game::DoCollisions()
                 // 如果砖块不是实心就销毁砖块
                 if (!box.IsSolid)
                     box.Destroyed = GL_TRUE;
+                else
+                {   // 如果是实心的砖块则激活shake特效
+                    ShakeTime = 0.05f;
+                    Effects->Shake = true;
+                }
                 // 碰撞处理
                 Direction dir = std::get<1>(collision);
                 glm::vec2 diff_vector = std::get<2>(collision);
