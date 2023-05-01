@@ -9,6 +9,7 @@
 #include <vector>
 #include "../GameObject/GameObject.h"
 #include "../GameResource/resource_manager.h"
+#include "../Render/SpriteRenderer.h"
 #include <fstream>
 #include <sstream>
 

@@ -9,7 +9,7 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "GameResource/resource_manager.h"
-#include "../Render/SpriteRenderer.h"
+#include "Render/SpriteRenderer.h"
 #include "GameLevel/GameLevel.h"
 
 // 代表了游戏的当前状态

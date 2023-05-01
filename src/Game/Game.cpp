@@ -4,6 +4,7 @@
 
 #include "Game.h"
 #include "GameObject/BallObject.h"
+#include "GameObject/ParticleGenerator.h"
 
 
 SpriteRenderer *Renderer;
@@ -20,6 +21,9 @@ const glm::vec2 INITIAL_BALL_VELOCITY(100.0f, -350.0f);
 const GLfloat BALL_RADIUS = 12.5f;
 
 BallObject     *Ball;
+
+// 粒子发生器
+ParticleGenerator   *Particles;
 
 GLboolean CheckCollision(GameObject &one, GameObject &two);
 
@@ -41,12 +45,18 @@ Game::~Game()
 void Game::Init()
 {
     // 加载着色器
-    ResourceManager::LoadShader("../src/Render/shaders/sprite.vsh", "../src/Render/shaders/sprite.fsh", nullptr, "sprite");
+    ResourceManager::LoadShader("../src/Game/Render/shaders/sprite.vsh", "../src/Game/Render/shaders/sprite.fsh", nullptr, "sprite");
     // 配置着色器
     glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width),
                                       static_cast<GLfloat>(this->Height), 0.0f, -1.0f, 1.0f);
     ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
     ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
+    // 加载粒子着色器
+    ResourceManager::LoadShader("../src/Game/Render/shaders/particle.vsh", "../src/Game/Render/shaders/particle.fsh", nullptr, "particle");
+    // 配置粒子着色器
+    ResourceManager::GetShader("particle").Use().SetInteger("sprite", 0);
+    ResourceManager::GetShader("particle").SetMatrix4("projection", projection);
+
     // 设置专用于渲染的控制
     Shader spriteShader = ResourceManager::GetShader("sprite");
     Renderer = new SpriteRenderer(spriteShader);
@@ -56,6 +66,7 @@ void Game::Init()
     ResourceManager::LoadTexture("../src/Game/GameResource/textures/block.png", GL_FALSE, "block");
     ResourceManager::LoadTexture("../src/Game/GameResource/textures/block_solid.png", GL_FALSE, "block_solid");
     ResourceManager::LoadTexture("../src/Game/GameResource/textures/paddle.png", true, "paddle");
+    ResourceManager::LoadTexture("../src/Game/GameResource/textures/particle.png", GL_TRUE, "particle");
     // 加载关卡
     GameLevel one; one.Load("../src/Game/GameLevel/levels/Standard.txt", this->Width, this->Height * 0.5);
     GameLevel two; two.Load("../src/Game/GameLevel/levels/A_Few_Small_Gaps.txt", this->Width, this->Height * 0.5);
@@ -76,6 +87,12 @@ void Game::Init()
     glm::vec2 ballPos = playerPos + glm::vec2(PLAYER_SIZE.x / 2 - BALL_RADIUS, -BALL_RADIUS * 2);
     Ball = new BallObject(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY,
                           ResourceManager::GetTexture("face"));
+    // 加载粒子发生器
+    Particles = new ParticleGenerator(
+            ResourceManager::GetShader("particle"),
+            ResourceManager::GetTexture("particle"),
+            500
+    );
 }
 
 void Game::Update(GLfloat dt)
@@ -87,6 +104,8 @@ void Game::Update(GLfloat dt)
         this->ResetLevel();
         this->ResetPlayer();
     }
+    // Update particles
+    Particles->Update(dt, *Ball, 2, glm::vec2(Ball->Radius / 2));
 }
 
 
@@ -132,6 +151,8 @@ void Game::Render()
         this->Levels[this->Level].Draw(*Renderer);
         // 绘制玩家
         Player->Draw(*Renderer);
+        // Draw particles
+        Particles->Draw();
         // 绘制球
         Ball->Draw(*Renderer);
     }

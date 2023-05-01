@@ -7,6 +7,7 @@
 
 
 #include "GameObject.h"
+#include "../Render/Texture2D.h"
 
 class BallObject : public GameObject
 {

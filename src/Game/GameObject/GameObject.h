@@ -9,8 +9,8 @@
 #include "glad/glad.h"
 #include "glm/glm.hpp"
 
-#include "../../Render/Texture2D.h"
-#include "../../Render/SpriteRenderer.h"
+#include "../Render/Texture2D.h"
+#include "../Render/SpriteRenderer.h"
 
 
 // Container object for holding all state relevant for a single
