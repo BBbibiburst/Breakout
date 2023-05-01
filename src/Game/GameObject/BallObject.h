@@ -15,6 +15,7 @@ public:
     // 球的状态
     GLfloat   Radius;
     GLboolean Stuck;
+    GLboolean Sticky, PassThrough;
 
 
     BallObject();

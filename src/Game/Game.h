@@ -11,6 +11,7 @@
 #include "GameResource/resource_manager.h"
 #include "Render/SpriteRenderer.h"
 #include "GameLevel/GameLevel.h"
+#include "GameObject/PowerUp.h"
 
 // 代表了游戏的当前状态
 enum GameState {
@@ -36,6 +37,7 @@ public:
     GLuint Width, Height;
     std::vector<GameLevel> Levels;
     GLuint Level;
+    std::vector<PowerUp>  PowerUps;
 
     // 构造函数/析构函数
     Game(GLuint width, GLuint height);
@@ -58,6 +60,11 @@ public:
     void ResetLevel();
 
     void ResetPlayer();
+
+    // PowerUps
+    void SpawnPowerUps(GameObject &block);
+
+    void UpdatePowerUps(GLfloat dt);
 };
 
 
